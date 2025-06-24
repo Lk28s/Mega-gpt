@@ -7,7 +7,6 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        /* Styles otimizados para Vercel */
         :root {
             --primary: #6d28d9;
             --light: #f5f3ff;
@@ -37,6 +36,19 @@
             0%, 100% { opacity: 0.2; transform: translateY(0); }
             50% { opacity: 1; transform: translateY(-5px); }
         }
+        
+        .animate-fadeIn {
+            animation: fadeIn 0.3s ease;
+        }
+        
+        .api-selector {
+            transition: all 0.3s ease;
+        }
+        
+        .api-selector:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        }
     </style>
 </head>
 <body class="bg-gray-50 min-h-screen flex flex-col">
@@ -51,15 +63,29 @@
                     </div>
                     <h1 class="text-xl font-semibold">Mega GPT</h1>
                 </div>
-                <button id="reset-chat" class="text-white hover:text-purple-200">
-                    <i class="fas fa-redo"></i>
-                </button>
+                <div class="flex items-center space-x-4">
+                    <select id="api-selector" class="bg-purple-700 text-white px-3 py-1 rounded-full text-sm focus:outline-none">
+                        <option value="gemini">Gemini API</option>
+                        <option value="huggingface">Hugging Face</option>
+                        <option value="openai">OpenAI</option>
+                    </select>
+                    <button id="reset-chat" class="text-white hover:text-purple-200">
+                        <i class="fas fa-redo"></i>
+                    </button>
+                </div>
             </div>
             
             <!-- Chat Messages -->
             <div id="chat-messages" class="p-4 overflow-y-auto space-y-4" style="height: 500px;">
                 <div class="bg-purple-50 p-4 rounded-lg max-w-3/4 animate-fadeIn">
-                    <p>Olá! Eu sou o Mega GPT. Como posso te ajudar hoje?</p>
+                    <p>🚀 <strong>Mega GPT com APIs reais!</strong></p>
+                    <p class="mt-2">Selecione qual API de IA você quer usar no menu acima:</p>
+                    <ul class="list-disc pl-5 mt-2 space-y-1">
+                        <li><strong>Gemini API</strong> - IA do Google</li>
+                        <li><strong>Hugging Face</strong> - Modelos open-source</li>
+                        <li><strong>OpenAI</strong> - API do ChatGPT</li>
+                    </ul>
+                    <p class="mt-3">🔑 <em>Nota: Você precisará de uma chave de API para algumas opções.</em></p>
                 </div>
             </div>
             
@@ -80,6 +106,60 @@
                         <i class="fas fa-paper-plane"></i>
                     </button>
                 </form>
+                <div id="api-key-container" class="mt-3 hidden">
+                    <input 
+                        id="api-key-input" 
+                        type="password" 
+                        placeholder="Insira sua chave de API (opcional)" 
+                        class="w-full border rounded-full px-4 py-2 focus:outline-none focus:ring-2 focus:ring-purple-500 text-sm"
+                    >
+                    <p class="text-xs text-gray-500 mt-1">Algumas APIs podem requerer chave. Guardaremos apenas nesta sessão.</p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- API Info Cards -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-8">
+            <div class="api-selector bg-white p-6 rounded-lg shadow-md border border-purple-100 cursor-pointer" data-api="gemini">
+                <div class="flex items-center space-x-3 mb-3">
+                    <div class="w-10 h-10 rounded-full bg-blue-50 flex items-center justify-center text-blue-600">
+                        <i class="fab fa-google text-xl"></i>
+                    </div>
+                    <h3 class="text-lg font-semibold">Gemini API</h3>
+                </div>
+                <p class="text-gray-600 text-sm">IA avançada do Google com boa capacidade de raciocínio.</p>
+                <div class="mt-4 flex justify-between items-center">
+                    <span class="text-xs px-2 py-1 bg-blue-100 text-blue-800 rounded-full">Requer chave</span>
+                    <a href="https://ai.google.dev/" target="_blank" class="text-xs text-blue-600 hover:underline">Obter chave</a>
+                </div>
+            </div>
+            
+            <div class="api-selector bg-white p-6 rounded-lg shadow-md border border-purple-100 cursor-pointer" data-api="huggingface">
+                <div class="flex items-center space-x-3 mb-3">
+                    <div class="w-10 h-10 rounded-full bg-yellow-50 flex items-center justify-center text-yellow-600">
+                        <i class="fas fa-heart text-xl"></i>
+                    </div>
+                    <h3 class="text-lg font-semibold">Hugging Face</h3>
+                </div>
+                <p class="text-gray-600 text-sm">Modelos open-source com diversas opções gratuitas.</p>
+                <div class="mt-4 flex justify-between items-center">
+                    <span class="text-xs px-2 py-1 bg-yellow-100 text-yellow-800 rounded-full">Free tier</span>
+                    <a href="https://huggingface.co/" target="_blank" class="text-xs text-blue-600 hover:underline">Explorar</a>
+                </div>
+            </div>
+            
+            <div class="api-selector bg-white p-6 rounded-lg shadow-md border border-purple-100 cursor-pointer" data-api="openai">
+                <div class="flex items-center space-x-3 mb-3">
+                    <div class="w-10 h-10 rounded-full bg-green-50 flex items-center justify-center text-green-600">
+                        <i class="fas fa-comment-dots text-xl"></i>
+                    </div>
+                    <h3 class="text-lg font-semibold">OpenAI</h3>
+                </div>
+                <p class="text-gray-600 text-sm">API do ChatGPT com modelos avançados.</p>
+                <div class="mt-4 flex justify-between items-center">
+                    <span class="text-xs px-2 py-1 bg-green-100 text-green-800 rounded-full">Free tier limitado</span>
+                    <a href="https://platform.openai.com/" target="_blank" class="text-xs text-blue-600 hover:underline">Obter chave</a>
+                </div>
             </div>
         </div>
     </div>
@@ -87,7 +167,7 @@
     <!-- Footer -->
     <footer class="bg-purple-900 text-white py-6">
         <div class="container mx-auto px-4 text-center">
-            <p>© 2024 Lks Modder - Todos os direitos reservados</p>
+            <p>© 2023 Mega GPT - Todos os direitos reservados</p>
         </div>
     </footer>
 
@@ -97,18 +177,82 @@
             const messageForm = document.getElementById('message-form');
             const userInput = document.getElementById('user-input');
             const resetChatBtn = document.getElementById('reset-chat');
+            const apiSelector = document.getElementById('api-selector');
+            const apiKeyContainer = document.getElementById('api-key-container');
+            const apiKeyInput = document.getElementById('api-key-input');
             
-            // Adiciona mensagem ao chat
-            function addMessage(content, isUser = false) {
+            let currentApi = 'gemini';
+            let apiKey = '';
+            
+            // Configurações das APIs
+            const apiConfig = {
+                gemini: {
+                    name: 'Gemini API',
+                    endpoint: 'https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent',
+                    requiresKey: true
+                },
+                huggingface: {
+                    name: 'Hugging Face',
+                    endpoint: 'https://api-inference.huggingface.co/models/gpt2',
+                    requiresKey: true
+                },
+                openai: {
+                    name: 'OpenAI',
+                    endpoint: 'https://api.openai.com/v1/chat/completions',
+                    requiresKey: true
+                }
+            };
+            
+            // Selecionar API
+            apiSelector.addEventListener('change', (e) => {
+                currentApi = e.target.value;
+                updateApiKeyVisibility();
+                addSystemMessage(`API alterada para: ${apiConfig[currentApi].name}`);
+            });
+            
+            // Selecionar API pelos cards
+            document.querySelectorAll('.api-selector').forEach(card => {
+                card.addEventListener('click', () => {
+                    currentApi = card.dataset.api;
+                    apiSelector.value = currentApi;
+                    updateApiKeyVisibility();
+                    addSystemMessage(`API alterada para: ${apiConfig[currentApi].name}`);
+                });
+            });
+            
+            // Atualizar visibilidade do campo de API key
+            function updateApiKeyVisibility() {
+                if (apiConfig[currentApi].requiresKey) {
+                    apiKeyContainer.classList.remove('hidden');
+                } else {
+                    apiKeyContainer.classList.add('hidden');
+                }
+            }
+            
+            // Adicionar mensagem ao chat
+            function addMessage(content, isUser = false, isSystem = false) {
                 const messageDiv = document.createElement('div');
-                messageDiv.className = `p-4 rounded-lg max-w-3/4 bg-${isUser ? 'purple-100 ml-auto' : 'purple-50'} animate-fadeIn`;
+                
+                if (isSystem) {
+                    messageDiv.className = 'bg-purple-100 p-2 rounded-lg max-w-3/4 mx-auto text-center text-sm text-purple-800 animate-fadeIn';
+                } else if (isUser) {
+                    messageDiv.className = 'p-4 rounded-lg max-w-3/4 bg-purple-100 ml-auto animate-fadeIn';
+                } else {
+                    messageDiv.className = 'bg-purple-50 p-4 rounded-lg max-w-3/4 animate-fadeIn';
+                }
+                
                 messageDiv.style.animation = 'fadeIn 0.3s ease';
                 messageDiv.innerHTML = `<p>${content}</p>`;
                 chatMessages.appendChild(messageDiv);
                 chatMessages.scrollTop = chatMessages.scrollHeight;
             }
             
-            // Mostra indicador de digitação
+            // Mensagem do sistema
+            function addSystemMessage(content) {
+                addMessage(content, false, true);
+            }
+            
+            // Mostrar indicador de digitação
             function showTyping() {
                 const typingDiv = document.createElement('div');
                 typingDiv.className = 'flex space-x-1 p-4';
@@ -122,29 +266,99 @@
                 chatMessages.scrollTop = chatMessages.scrollHeight;
             }
             
-            // Remove indicador de digitação
+            // Remover indicador de digitação
             function hideTyping() {
                 const typing = document.getElementById('typing-indicator');
                 if (typing) typing.remove();
             }
             
-            // Simula resposta da API Grok AI
-            function getAIResponse(message) {
-                return new Promise(resolve => {
-                    const responses = [
-                        "Posso te ajudar com isso usando os recursos avançados do Grok AI!",
-                        "O Mega GPT analisou sua pergunta e tem uma resposta para você.",
-                        "Ótima questão! Veja o que encontrei usando algoritmos de IA:",
-                        "Baseado no processamento de linguagem natural, aqui está o que sei...",
-                        "Minha análise indica que..."
-                    ];
-                    setTimeout(() => {
-                        resolve(responses[Math.floor(Math.random() * responses.length)]);
-                    }, 1500);
-                });
+            // Chamar API selecionada
+            async function callSelectedAPI(message) {
+                apiKey = apiKeyInput.value.trim();
+                
+                try {
+                    switch(currentApi) {
+                        case 'gemini':
+                            return await callGeminiAPI(message);
+                        case 'huggingface':
+                            return await callHuggingFaceAPI(message);
+                        case 'openai':
+                            return await callOpenAIAPI(message);
+                        default:
+                            return "API não reconhecida. Por favor, selecione outra opção.";
+                    }
+                } catch (error) {
+                    console.error("Erro na API:", error);
+                    return `❌ Erro ao acessar a API: ${error.message || 'Erro desconhecido'}`;
+                }
             }
             
-            // Envia mensagem
+            // Chamar Gemini API
+            async function callGeminiAPI(message) {
+                if (!apiKey) return "🔑 Por favor, insira uma chave de API válida para o Gemini.";
+                
+                const response = await fetch(`${apiConfig.gemini.endpoint}?key=${apiKey}`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        contents: [{
+                            parts: [{
+                                text: message
+                            }]
+                        }]
+                    })
+                });
+                
+                const data = await response.json();
+                return data.candidates?.[0]?.content?.parts?.[0]?.text || "Não foi possível obter uma resposta do Gemini.";
+            }
+            
+            // Chamar Hugging Face API
+            async function callHuggingFaceAPI(message) {
+                if (!apiKey) return "🔑 Por favor, insira uma chave de API válida para o Hugging Face.";
+                
+                const response = await fetch(apiConfig.huggingface.endpoint, {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `Bearer ${apiKey}`,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        inputs: message
+                    })
+                });
+                
+                const data = await response.json();
+                return data[0]?.generated_text || "Não foi possível obter uma resposta do Hugging Face.";
+            }
+            
+            // Chamar OpenAI API
+            async function callOpenAIAPI(message) {
+                if (!apiKey) return "🔑 Por favor, insira uma chave de API válida para o OpenAI.";
+                
+                const response = await fetch(apiConfig.openai.endpoint, {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `Bearer ${apiKey}`,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        model: "gpt-3.5-turbo",
+                        messages: [{
+                            role: "user",
+                            content: message
+                        }],
+                        temperature: 0.7
+                    })
+                });
+                
+                const data = await response.json();
+                return data.choices?.[0]?.message?.content || "Não foi possível obter uma resposta do OpenAI.";
+            }
+            
+            // Enviar mensagem
             messageForm.addEventListener('submit', async (e) => {
                 e.preventDefault();
                 const message = userInput.value.trim();
@@ -154,23 +368,31 @@
                     userInput.value = '';
                     
                     showTyping();
-                    const response = await getAIResponse(message);
+                    const response = await callSelectedAPI(message);
                     hideTyping();
                     addMessage(response);
                 }
             });
             
-            // Limpa o chat
+            // Limpar chat
             resetChatBtn.addEventListener('click', () => {
                 chatMessages.innerHTML = `
                     <div class="bg-purple-50 p-4 rounded-lg max-w-3/4 animate-fadeIn">
-                        <p>Olá! Eu sou o Mega GPT. Como posso te ajudar hoje?</p>
+                        <p>🚀 <strong>Mega GPT com APIs reais!</strong></p>
+                        <p class="mt-2">Selecione qual API de IA você quer usar no menu acima:</p>
+                        <ul class="list-disc pl-5 mt-2 space-y-1">
+                            <li><strong>Gemini API</strong> - IA do Google</li>
+                            <li><strong>Hugging Face</strong> - Modelos open-source</li>
+                            <li><strong>OpenAI</strong> - API do ChatGPT</li>
+                        </ul>
+                        <p class="mt-3">🔑 <em>Nota: Você precisará de uma chave de API para algumas opções.</em></p>
                     </div>
                 `;
             });
             
             // Foco no input ao carregar
             userInput.focus();
+            updateApiKeyVisibility();
         });
     </script>
 </body>
