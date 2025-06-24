@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mega GPT - IA Poderosa</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* Styles otimizados para Vercel */
+        :root {
+            --primary: #6d28d9;
+            --light: #f5f3ff;
+        }
+        
+        .gradient-bg {
+            background: linear-gradient(135deg, #6d28d9, #8b5cf6);
+        }
+        
+        .chat-container {
+            height: 70vh;
+            max-height: 600px;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .typing-indicator div {
+            width: 8px;
+            height: 8px;
+            animation: typingAnimation 1.4s infinite ease-in-out;
+        }
+        
+        @keyframes typingAnimation {
+            0%, 100% { opacity: 0.2; transform: translateY(0); }
+            50% { opacity: 1; transform: translateY(-5px); }
+        }
+    </style>
+</head>
+<body class="bg-gray-50 min-h-screen flex flex-col">
+    <!-- Chat Interface -->
+    <div class="container mx-auto px-4 py-8 flex-1">
+        <div class="max-w-4xl mx-auto bg-white rounded-xl shadow-md overflow-hidden">
+            <!-- Chat Header -->
+            <div class="gradient-bg text-white p-4 flex items-center justify-between">
+                <div class="flex items-center space-x-3">
+                    <div class="w-10 h-10 rounded-full bg-white flex items-center justify-center text-purple-700">
+                        <i class="fas fa-robot text-xl"></i>
+                    </div>
+                    <h1 class="text-xl font-semibold">Mega GPT</h1>
+                </div>
+                <button id="reset-chat" class="text-white hover:text-purple-200">
+                    <i class="fas fa-redo"></i>
+                </button>
+            </div>
+            
+            <!-- Chat Messages -->
+            <div id="chat-messages" class="p-4 overflow-y-auto space-y-4" style="height: 500px;">
+                <div class="bg-purple-50 p-4 rounded-lg max-w-3/4 animate-fadeIn">
+                    <p>Olá! Eu sou o Mega GPT. Como posso te ajudar hoje?</p>
+                </div>
+            </div>
+            
+            <!-- Input Area -->
+            <div class="border-t p-4">
+                <form id="message-form" class="flex">
+                    <input 
+                        id="user-input" 
+                        type="text" 
+                        placeholder="Digite sua mensagem..." 
+                        class="flex-grow border rounded-l-full px-4 py-2 focus:outline-none focus:ring-2 focus:ring-purple-500"
+                        autocomplete="off"
+                    >
+                    <button 
+                        type="submit" 
+                        class="gradient-bg text-white px-6 py-2 rounded-r-full hover:bg-purple-700 transition-colors"
+                    >
+                        <i class="fas fa-paper-plane"></i>
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-purple-900 text-white py-6">
+        <div class="container mx-auto px-4 text-center">
+            <p>© 2024 Lks Modder - Todos os direitos reservados</p>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const chatMessages = document.getElementById('chat-messages');
+            const messageForm = document.getElementById('message-form');
+            const userInput = document.getElementById('user-input');
+            const resetChatBtn = document.getElementById('reset-chat');
+            
+            // Adiciona mensagem ao chat
+            function addMessage(content, isUser = false) {
+                const messageDiv = document.createElement('div');
+                messageDiv.className = `p-4 rounded-lg max-w-3/4 bg-${isUser ? 'purple-100 ml-auto' : 'purple-50'} animate-fadeIn`;
+                messageDiv.style.animation = 'fadeIn 0.3s ease';
+                messageDiv.innerHTML = `<p>${content}</p>`;
+                chatMessages.appendChild(messageDiv);
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+            }
+            
+            // Mostra indicador de digitação
+            function showTyping() {
+                const typingDiv = document.createElement('div');
+                typingDiv.className = 'flex space-x-1 p-4';
+                typingDiv.id = 'typing-indicator';
+                typingDiv.innerHTML = `
+                    <div class="bg-purple-600 rounded-full delay-0"></div>
+                    <div class="bg-purple-600 rounded-full delay-200"></div>
+                    <div class="bg-purple-600 rounded-full delay-400"></div>
+                `;
+                chatMessages.appendChild(typingDiv);
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+            }
+            
+            // Remove indicador de digitação
+            function hideTyping() {
+                const typing = document.getElementById('typing-indicator');
+                if (typing) typing.remove();
+            }
+            
+            // Simula resposta da API Grok AI
+            function getAIResponse(message) {
+                return new Promise(resolve => {
+                    const responses = [
+                        "Posso te ajudar com isso usando os recursos avançados do Grok AI!",
+                        "O Mega GPT analisou sua pergunta e tem uma resposta para você.",
+                        "Ótima questão! Veja o que encontrei usando algoritmos de IA:",
+                        "Baseado no processamento de linguagem natural, aqui está o que sei...",
+                        "Minha análise indica que..."
+                    ];
+                    setTimeout(() => {
+                        resolve(responses[Math.floor(Math.random() * responses.length)]);
+                    }, 1500);
+                });
+            }
+            
+            // Envia mensagem
+            messageForm.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                const message = userInput.value.trim();
+                
+                if (message) {
+                    addMessage(message, true);
+                    userInput.value = '';
+                    
+                    showTyping();
+                    const response = await getAIResponse(message);
+                    hideTyping();
+                    addMessage(response);
+                }
+            });
+            
+            // Limpa o chat
+            resetChatBtn.addEventListener('click', () => {
+                chatMessages.innerHTML = `
+                    <div class="bg-purple-50 p-4 rounded-lg max-w-3/4 animate-fadeIn">
+                        <p>Olá! Eu sou o Mega GPT. Como posso te ajudar hoje?</p>
+                    </div>
+                `;
+            });
+            
+            // Foco no input ao carregar
+            userInput.focus();
+        });
+    </script>
+</body>
+</html>
